@@ -3,7 +3,9 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:ramaniya_mobile/core/theme/app_colors.dart';
 
 abstract final class AppTheme {
-  static ThemeData get light {
+  static final ThemeData light = _buildLightTheme();
+
+  static ThemeData _buildLightTheme() {
     final base = ThemeData(
       useMaterial3: true,
       brightness: Brightness.light,
