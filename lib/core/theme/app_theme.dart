@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:ramaniya_mobile/core/theme/app_colors.dart';
 
 abstract final class AppTheme {
@@ -7,7 +8,6 @@ abstract final class AppTheme {
       useMaterial3: true,
       brightness: Brightness.light,
       scaffoldBackgroundColor: AppColors.scaffoldBackground,
-      fontFamily: 'Roboto',
       colorScheme: const ColorScheme.light(
         primary: AppColors.primaryDarkGreen,
         secondary: AppColors.primaryMediumGreen,
@@ -16,7 +16,7 @@ abstract final class AppTheme {
     );
 
     return base.copyWith(
-      textTheme: base.textTheme.apply(
+      textTheme: GoogleFonts.interTextTheme(base.textTheme).apply(
         bodyColor: AppColors.bodyGray,
         displayColor: AppColors.headingDark,
       ),
