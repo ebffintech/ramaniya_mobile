@@ -117,49 +117,34 @@ class _HeroSection extends StatelessWidget {
 class _FeatureCards extends StatelessWidget {
   const _FeatureCards();
 
+  static const _cards = [
+    _FeatureCardData(
+      icon: Icons.verified_user_outlined,
+      title: 'SEBI-aligned',
+      subtitle: 'KYC & nominee',
+    ),
+    _FeatureCardData(
+      icon: Icons.trending_up,
+      title: '1,200+ funds',
+      subtitle: 'AMFI data',
+    ),
+    _FeatureCardData(
+      icon: Icons.groups_outlined,
+      title: 'Distributor desk',
+      subtitle: 'AI-prepared',
+    ),
+  ];
+
   @override
   Widget build(BuildContext context) {
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        final isNarrow = constraints.maxWidth < 520;
-        final cards = [
-          _FeatureCardData(
-            icon: Icons.verified_user_outlined,
-            title: 'SEBI-aligned',
-            subtitle: 'KYC & nominee',
-          ),
-          _FeatureCardData(
-            icon: Icons.trending_up,
-            title: '1,200+ funds',
-            subtitle: 'AMFI data',
-          ),
-          _FeatureCardData(
-            icon: Icons.groups_outlined,
-            title: 'Distributor desk',
-            subtitle: 'AI-prepared',
-          ),
-        ];
-
-        if (isNarrow) {
-          return Column(
-            children: [
-              for (var i = 0; i < cards.length; i++) ...[
-                if (i > 0) const SizedBox(height: 12),
-                _FeatureCard(data: cards[i]),
-              ],
-            ],
-          );
-        }
-
-        return Row(
-          children: [
-            for (var i = 0; i < cards.length; i++) ...[
-              if (i > 0) const SizedBox(width: 12),
-              Expanded(child: _FeatureCard(data: cards[i])),
-            ],
-          ],
-        );
-      },
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        for (var i = 0; i < _cards.length; i++) ...[
+          if (i > 0) const SizedBox(width: 8),
+          Expanded(child: _FeatureCard(data: _cards[i])),
+        ],
+      ],
     );
   }
 }
@@ -184,18 +169,19 @@ class _FeatureCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 18),
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 14),
       decoration: BoxDecoration(
         color: AppColors.white,
         borderRadius: BorderRadius.circular(12),
         border: Border.all(color: AppColors.cardBorder),
       ),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Container(
-            width: 36,
-            height: 36,
+            width: 32,
+            height: 32,
             alignment: Alignment.center,
             decoration: BoxDecoration(
               color: AppColors.lightMintGreen,
@@ -203,24 +189,32 @@ class _FeatureCard extends StatelessWidget {
             ),
             child: Icon(
               data.icon,
-              size: 20,
+              size: 18,
               color: AppColors.primaryDarkGreen,
             ),
           ),
-          const SizedBox(height: 12),
+          const SizedBox(height: 10),
           Text(
             data.title,
+            textAlign: TextAlign.center,
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
             style: const TextStyle(
-              fontSize: 14,
+              fontSize: 12,
               fontWeight: FontWeight.w700,
+              height: 1.25,
               color: AppColors.headingDark,
             ),
           ),
           const SizedBox(height: 4),
           Text(
             data.subtitle,
+            textAlign: TextAlign.center,
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
             style: const TextStyle(
-              fontSize: 12,
+              fontSize: 11,
+              height: 1.25,
               color: AppColors.bodyGray,
             ),
           ),
