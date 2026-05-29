@@ -8,6 +8,6 @@ void main() {
 
     expect(find.textContaining('mutual fund platform'), findsOneWidget);
     expect(find.text('RAMANIYA'), findsOneWidget);
-    expect(find.text('Start as an investor'), findsOneWidget);
+    expect(find.text('Start as investor'), findsOneWidget);
   });
 }

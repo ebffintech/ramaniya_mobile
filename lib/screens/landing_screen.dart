@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ramaniya_mobile/core/theme/app_colors.dart';
+import 'package:ramaniya_mobile/screens/login_screen.dart';
 
 class LandingScreen extends StatelessWidget {
   const LandingScreen({super.key});
@@ -332,7 +333,13 @@ class _InvestorCard extends StatelessWidget {
             title: 'Start as investor',
             badge: 'RECOMMENDED',
             subtitle: '3 prep questions \u2192 KYC \u2192 SIP / lumpsum in ~5 min',
-            onTap: () {},
+            onTap: () {
+              Navigator.of(context).push(
+                MaterialPageRoute<void>(
+                  builder: (context) => const LoginScreen(),
+                ),
+              );
+            },
           ),
           const SizedBox(height: 12),
           _InvestorCtaButton(
