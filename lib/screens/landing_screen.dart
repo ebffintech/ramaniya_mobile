@@ -81,7 +81,7 @@ class _HeroSection extends StatelessWidget {
         Text.rich(
           TextSpan(
             style: const TextStyle(
-              fontSize: 32,
+              fontSize: 24,
               height: 1.2,
               fontWeight: FontWeight.w700,
               letterSpacing: -0.5,
@@ -104,7 +104,7 @@ class _HeroSection extends StatelessWidget {
           'Whether you invest with \u20B9500 SIPs or run a full desk of distributors, Ramaniya keeps onboarding, KYC, and post-investment hygiene in one clean flow.',
           textAlign: TextAlign.center,
           style: TextStyle(
-            fontSize: 15,
+            fontSize: 12,
             height: 1.55,
             color: AppColors.bodyGray,
           ),
@@ -200,7 +200,7 @@ class _FeatureCard extends StatelessWidget {
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
             style: const TextStyle(
-              fontSize: 12,
+              fontSize: 10,
               fontWeight: FontWeight.w700,
               height: 1.25,
               color: AppColors.headingDark,
@@ -213,7 +213,7 @@ class _FeatureCard extends StatelessWidget {
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
             style: const TextStyle(
-              fontSize: 11,
+              fontSize: 9,
               height: 1.25,
               color: AppColors.bodyGray,
             ),
@@ -230,12 +230,14 @@ class _StartingPointSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
           'PICK YOUR STARTING POINT',
+          textAlign: TextAlign.left,
           style: TextStyle(
-            fontSize: 11,
-            fontWeight: FontWeight.w700,
+            fontSize: 10,
+            fontWeight: FontWeight.w800,
             letterSpacing: 1.2,
             color: AppColors.bodyGray,
           ),
@@ -243,9 +245,9 @@ class _StartingPointSection extends StatelessWidget {
         const SizedBox(height: 8),
         Text(
           'You can switch any time \u2014 your data stays with you.',
-          textAlign: TextAlign.center,
+          textAlign: TextAlign.left,
           style: TextStyle(
-            fontSize: 14,
+            fontSize: 10,
             color: AppColors.bodyGray,
           ),
         ),
@@ -308,7 +310,7 @@ class _InvestorCard extends StatelessWidget {
           const Text(
             'I want to start investing',
             style: TextStyle(
-              fontSize: 22,
+              fontSize: 24,
               fontWeight: FontWeight.w700,
               color: AppColors.white,
               height: 1.25,
@@ -318,7 +320,7 @@ class _InvestorCard extends StatelessWidget {
           Text(
             'Invest on your own with guided prep \u2192 KYC \u2192 SIP or lumpsum in about 5 minutes.',
             style: TextStyle(
-              fontSize: 14,
+              fontSize: 12,
               height: 1.45,
               color: AppColors.investorMutedText,
             ),
@@ -327,7 +329,7 @@ class _InvestorCard extends StatelessWidget {
           _InvestorCtaButton(
             isPrimary: true,
             icon: Icons.rocket_launch_outlined,
-            title: 'Start as an investor',
+            title: 'Start as investor',
             badge: 'RECOMMENDED',
             subtitle: '3 prep questions \u2192 KYC \u2192 SIP / lumpsum in ~5 min',
             onTap: () {},
@@ -406,26 +408,29 @@ class _InvestorCtaButton extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Wrap(
-                      crossAxisAlignment: WrapCrossAlignment.center,
-                      spacing: 8,
-                      runSpacing: 4,
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        Text(
-                          title,
-                          style: TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.w700,
-                            color: isPrimary
-                                ? AppColors.headingDark
-                                : AppColors.white,
+                        Flexible(
+                          child: Text(
+                            title,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                              fontSize: 10,
+                              fontWeight: FontWeight.w700,
+                              color: isPrimary
+                                  ? AppColors.headingDark
+                                  : AppColors.white,
+                            ),
                           ),
                         ),
-                        if (badge != null)
+                        if (badge != null) ...[
+                          const SizedBox(width: 8),
                           Container(
                             padding: const EdgeInsets.symmetric(
-                              horizontal: 8,
-                              vertical: 2,
+                              horizontal: 6,
+                              vertical: 1,
                             ),
                             decoration: BoxDecoration(
                               color: AppColors.lightMintGreen,
@@ -434,20 +439,21 @@ class _InvestorCtaButton extends StatelessWidget {
                             child: Text(
                               badge!,
                               style: TextStyle(
-                                fontSize: 9,
+                                fontSize: 8,
                                 fontWeight: FontWeight.w700,
                                 letterSpacing: 0.5,
                                 color: AppColors.primaryDarkGreen,
                               ),
                             ),
                           ),
+                        ],
                       ],
                     ),
                     const SizedBox(height: 4),
                     Text(
                       subtitle,
                       style: TextStyle(
-                        fontSize: 12,
+                        fontSize: 10,
                         height: 1.35,
                         color: isPrimary
                             ? AppColors.bodyGray
@@ -481,7 +487,7 @@ class _FooterDisclaimer extends StatelessWidget {
       'Ramaniya doesn\u2019t hold your money. SIPs and redemptions move directly between your bank and the AMC, regulated by SEBI.',
       textAlign: TextAlign.center,
       style: TextStyle(
-        fontSize: 12,
+        fontSize: 10,
         height: 1.5,
         color: AppColors.bodyGray,
       ),
