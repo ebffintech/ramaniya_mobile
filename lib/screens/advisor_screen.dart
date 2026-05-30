@@ -233,35 +233,16 @@ class _AdvisorFormFields extends StatelessWidget {
         const SizedBox(height: 8),
         const _AdvisorTextField(),
         const SizedBox(height: 18),
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const _FieldLabel('Email'),
-                  const SizedBox(height: 8),
-                  const _AdvisorTextField(
-                    keyboardType: TextInputType.emailAddress,
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(width: 12),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const _FieldLabel('Phone'),
-                  const SizedBox(height: 8),
-                  const _AdvisorTextField(
-                    keyboardType: TextInputType.phone,
-                  ),
-                ],
-              ),
-            ),
-          ],
+        const _FieldLabel('Email'),
+        const SizedBox(height: 8),
+        const _AdvisorTextField(
+          keyboardType: TextInputType.emailAddress,
+        ),
+        const SizedBox(height: 18),
+        const _FieldLabel('Phone'),
+        const SizedBox(height: 8),
+        const _AdvisorTextField(
+          keyboardType: TextInputType.phone,
         ),
         const SizedBox(height: 18),
         const _FieldLabel('City'),
