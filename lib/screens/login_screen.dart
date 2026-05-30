@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ramaniya_mobile/core/theme/app_colors.dart';
+import 'package:ramaniya_mobile/widgets/screen_back_button.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -18,59 +19,73 @@ class _LoginScreenState extends State<LoginScreen> {
     return Scaffold(
       backgroundColor: _loginBackground,
       body: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              const _LoginHeader(),
-              const SizedBox(height: 28),
-              _AuthTabSwitcher(
-                hasAccount: _hasAccount,
-                onChanged: (value) => setState(() => _hasAccount = value),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            const Padding(
+              padding: EdgeInsets.fromLTRB(20, 12, 20, 0),
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: ScreenBackButton(),
               ),
-              const SizedBox(height: 24),
-              if (_hasAccount) ...[
-                const _LoginFormFields(),
-                const SizedBox(height: 8),
-                Align(
-                  alignment: Alignment.centerRight,
-                  child: TextButton(
-                    onPressed: () {},
-                    style: TextButton.styleFrom(
-                      padding: EdgeInsets.zero,
-                      minimumSize: Size.zero,
-                      tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+            ),
+            Expanded(
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.fromLTRB(24, 16, 24, 32),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    const _LoginHeader(),
+                    const SizedBox(height: 28),
+                    _AuthTabSwitcher(
+                      hasAccount: _hasAccount,
+                      onChanged: (value) => setState(() => _hasAccount = value),
                     ),
-                    child: const Text(
-                      'Forgot Password?',
-                      style: TextStyle(
-                        fontSize: 12,
-                        fontWeight: FontWeight.w700,
-                        color: AppColors.primaryDarkGreen,
+                    const SizedBox(height: 24),
+                    if (_hasAccount) ...[
+                      const _LoginFormFields(),
+                      const SizedBox(height: 8),
+                      Align(
+                        alignment: Alignment.centerRight,
+                        child: TextButton(
+                          onPressed: () {},
+                          style: TextButton.styleFrom(
+                            padding: EdgeInsets.zero,
+                            minimumSize: Size.zero,
+                            tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                          ),
+                          child: const Text(
+                            'Forgot Password?',
+                            style: TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w700,
+                              color: AppColors.primaryDarkGreen,
+                            ),
+                          ),
+                        ),
                       ),
-                    ),
-                  ),
+                      const SizedBox(height: 20),
+                      _SignInButton(onPressed: () {}),
+                      const SizedBox(height: 12),
+                      Text(
+                        'We\u2019ll take you straight to your dashboard.',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 11,
+                          color: AppColors.bodyGray,
+                        ),
+                      ),
+                      const SizedBox(height: 28),
+                      const _SocialLoginSection(),
+                    ] else
+                      const _NewUserPlaceholder(),
+                    const SizedBox(height: 32),
+                    const _LoginFooter(),
+                  ],
                 ),
-                const SizedBox(height: 20),
-                _SignInButton(onPressed: () {}),
-                const SizedBox(height: 12),
-                Text(
-                  'We\u2019ll take you straight to your dashboard.',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 11,
-                    color: AppColors.bodyGray,
-                  ),
-                ),
-                const SizedBox(height: 28),
-                const _SocialLoginSection(),
-              ] else
-                const _NewUserPlaceholder(),
-              const SizedBox(height: 32),
-              const _LoginFooter(),
-            ],
-          ),
+              ),
+            ),
+          ],
         ),
       ),
     );

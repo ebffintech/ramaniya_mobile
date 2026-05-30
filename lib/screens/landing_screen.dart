@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ramaniya_mobile/core/theme/app_colors.dart';
+import 'package:ramaniya_mobile/screens/advisor_screen.dart';
 import 'package:ramaniya_mobile/screens/login_screen.dart';
 
 class LandingScreen extends StatelessWidget {
@@ -347,7 +348,13 @@ class _InvestorCard extends StatelessWidget {
             icon: Icons.phone_outlined,
             title: 'Call an advisor',
             subtitle: 'Share basics \u2192 30-min discovery call \u2192 plan in 48 hrs',
-            onTap: () {},
+            onTap: () {
+              Navigator.of(context).push(
+                MaterialPageRoute<void>(
+                  builder: (context) => const AdvisorScreen(),
+                ),
+              );
+            },
           ),
         ],
       ),
