@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ramaniya_mobile/core/theme/app_colors.dart';
+import 'package:ramaniya_mobile/widgets/residency_check_content.dart';
 import 'package:ramaniya_mobile/widgets/screen_back_button.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -22,12 +23,23 @@ class _LoginScreenState extends State<LoginScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            const Padding(
-              padding: EdgeInsets.fromLTRB(20, 12, 20, 0),
-              child: Align(
-                alignment: Alignment.centerLeft,
-                child: ScreenBackButton(),
-              ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(20, 12, 20, 0),
+              child: _hasAccount
+                  ? const Align(
+                      alignment: Alignment.centerLeft,
+                      child: ScreenBackButton(),
+                    )
+                  : const Stack(
+                      alignment: Alignment.center,
+                      children: [
+                        Align(
+                          alignment: Alignment.centerLeft,
+                          child: ScreenBackButton(),
+                        ),
+                        ResidencyCheckTopBar(),
+                      ],
+                    ),
             ),
             Expanded(
               child: SingleChildScrollView(
@@ -35,8 +47,8 @@ class _LoginScreenState extends State<LoginScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    const _LoginHeader(),
-                    const SizedBox(height: 28),
+                    if (_hasAccount) const _LoginHeader(),
+                    if (_hasAccount) const SizedBox(height: 28),
                     _AuthTabSwitcher(
                       hasAccount: _hasAccount,
                       onChanged: (value) => setState(() => _hasAccount = value),
@@ -77,10 +89,10 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                       const SizedBox(height: 28),
                       const _SocialLoginSection(),
+                      const SizedBox(height: 32),
+                      const _LoginFooter(),
                     ] else
-                      const _NewUserPlaceholder(),
-                    const SizedBox(height: 32),
-                    const _LoginFooter(),
+                      const ResidencyCheckContent(),
                   ],
                 ),
               ),
@@ -558,25 +570,6 @@ class _LoginFooter extends StatelessWidget {
         ],
       ),
       textAlign: TextAlign.center,
-    );
-  }
-}
-
-class _NewUserPlaceholder extends StatelessWidget {
-  const _NewUserPlaceholder();
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 24),
-      child: Text(
-        'Create your account to start investing.',
-        textAlign: TextAlign.center,
-        style: TextStyle(
-          fontSize: 14,
-          color: AppColors.bodyGray,
-        ),
-      ),
     );
   }
 }
