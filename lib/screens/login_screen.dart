@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ramaniya_mobile/core/theme/app_colors.dart';
-import 'package:ramaniya_mobile/widgets/residency_check_content.dart';
+import 'package:ramaniya_mobile/screens/residency_check_screen.dart';
 import 'package:ramaniya_mobile/widgets/screen_back_button.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -13,7 +13,13 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   static const _loginBackground = Color(0xFFF7FBF8);
 
-  bool _hasAccount = true;
+  void _openResidencyCheck() {
+    Navigator.of(context).push(
+      MaterialPageRoute<void>(
+        builder: (context) => const ResidencyCheckScreen(),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -23,23 +29,12 @@ class _LoginScreenState extends State<LoginScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Padding(
-              padding: const EdgeInsets.fromLTRB(20, 12, 20, 0),
-              child: _hasAccount
-                  ? const Align(
-                      alignment: Alignment.centerLeft,
-                      child: ScreenBackButton(),
-                    )
-                  : const Stack(
-                      alignment: Alignment.center,
-                      children: [
-                        Align(
-                          alignment: Alignment.centerLeft,
-                          child: ScreenBackButton(),
-                        ),
-                        ResidencyCheckTopBar(),
-                      ],
-                    ),
+            const Padding(
+              padding: EdgeInsets.fromLTRB(20, 12, 20, 0),
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: ScreenBackButton(),
+              ),
             ),
             Expanded(
               child: SingleChildScrollView(
@@ -47,52 +42,48 @@ class _LoginScreenState extends State<LoginScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    if (_hasAccount) const _LoginHeader(),
-                    if (_hasAccount) const SizedBox(height: 28),
+                    const _LoginHeader(),
+                    const SizedBox(height: 28),
                     _AuthTabSwitcher(
-                      hasAccount: _hasAccount,
-                      onChanged: (value) => setState(() => _hasAccount = value),
+                      onNewUserTap: _openResidencyCheck,
                     ),
                     const SizedBox(height: 24),
-                    if (_hasAccount) ...[
-                      const _LoginFormFields(),
-                      const SizedBox(height: 8),
-                      Align(
-                        alignment: Alignment.centerRight,
-                        child: TextButton(
-                          onPressed: () {},
-                          style: TextButton.styleFrom(
-                            padding: EdgeInsets.zero,
-                            minimumSize: Size.zero,
-                            tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                          ),
-                          child: const Text(
-                            'Forgot Password?',
-                            style: TextStyle(
-                              fontSize: 12,
-                              fontWeight: FontWeight.w700,
-                              color: AppColors.primaryDarkGreen,
-                            ),
+                    const _LoginFormFields(),
+                    const SizedBox(height: 8),
+                    Align(
+                      alignment: Alignment.centerRight,
+                      child: TextButton(
+                        onPressed: () {},
+                        style: TextButton.styleFrom(
+                          padding: EdgeInsets.zero,
+                          minimumSize: Size.zero,
+                          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                        ),
+                        child: const Text(
+                          'Forgot Password?',
+                          style: TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w700,
+                            color: AppColors.primaryDarkGreen,
                           ),
                         ),
                       ),
-                      const SizedBox(height: 20),
-                      _SignInButton(onPressed: () {}),
-                      const SizedBox(height: 12),
-                      Text(
-                        'We\u2019ll take you straight to your dashboard.',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontSize: 11,
-                          color: AppColors.bodyGray,
-                        ),
+                    ),
+                    const SizedBox(height: 20),
+                    _SignInButton(onPressed: () {}),
+                    const SizedBox(height: 12),
+                    Text(
+                      'We\u2019ll take you straight to your dashboard.',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 11,
+                        color: AppColors.bodyGray,
                       ),
-                      const SizedBox(height: 28),
-                      const _SocialLoginSection(),
-                      const SizedBox(height: 32),
-                      const _LoginFooter(),
-                    ] else
-                      const ResidencyCheckContent(),
+                    ),
+                    const SizedBox(height: 28),
+                    const _SocialLoginSection(),
+                    const SizedBox(height: 32),
+                    const _LoginFooter(),
                   ],
                 ),
               ),
@@ -166,13 +157,9 @@ class _LoginHeader extends StatelessWidget {
 }
 
 class _AuthTabSwitcher extends StatelessWidget {
-  const _AuthTabSwitcher({
-    required this.hasAccount,
-    required this.onChanged,
-  });
+  const _AuthTabSwitcher({required this.onNewUserTap});
 
-  final bool hasAccount;
-  final ValueChanged<bool> onChanged;
+  final VoidCallback onNewUserTap;
 
   @override
   Widget build(BuildContext context) {
@@ -187,15 +174,15 @@ class _AuthTabSwitcher extends StatelessWidget {
           Expanded(
             child: _AuthTab(
               label: 'I have an account',
-              isActive: hasAccount,
-              onTap: () => onChanged(true),
+              isActive: true,
+              onTap: () {},
             ),
           ),
           Expanded(
             child: _AuthTab(
               label: 'I\u2019m new here',
-              isActive: !hasAccount,
-              onTap: () => onChanged(false),
+              isActive: false,
+              onTap: onNewUserTap,
             ),
           ),
         ],
