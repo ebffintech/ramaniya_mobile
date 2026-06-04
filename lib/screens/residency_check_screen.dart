@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:ramaniya_mobile/core/theme/app_colors.dart';
 import 'package:ramaniya_mobile/screens/advisor_screen.dart';
+import 'package:ramaniya_mobile/screens/login_screen.dart';
+import 'package:ramaniya_mobile/widgets/auth_tab_switcher.dart';
 import 'package:ramaniya_mobile/widgets/screen_back_button.dart';
 
 class ResidencyCheckScreen extends StatelessWidget {
@@ -57,6 +59,24 @@ class ResidencyCheckScreen extends StatelessWidget {
                     ),
                   ),
                 ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(20, 16, 20, 0),
+              child: AuthTabSwitcher(
+                hasAccount: false,
+                onHaveAccountTap: () {
+                  if (Navigator.of(context).canPop()) {
+                    Navigator.of(context).pop();
+                  } else {
+                    Navigator.of(context).pushReplacement(
+                      MaterialPageRoute<void>(
+                        builder: (context) => const LoginScreen(),
+                      ),
+                    );
+                  }
+                },
+                onNewUserTap: () {},
               ),
             ),
             Expanded(

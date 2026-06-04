@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ramaniya_mobile/core/theme/app_colors.dart';
+import 'package:ramaniya_mobile/screens/scheduling_screen.dart';
 import 'package:ramaniya_mobile/widgets/screen_back_button.dart';
 
 class AdvisorScreen extends StatelessWidget {
@@ -93,7 +94,14 @@ class AdvisorScreen extends StatelessWidget {
                     SizedBox(
                       width: double.infinity,
                       child: ElevatedButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute<void>(
+                              builder: (context) =>
+                                  const SchedulingScreen(),
+                            ),
+                          );
+                        },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: AppColors.primaryDarkGreen,
                           foregroundColor: AppColors.white,

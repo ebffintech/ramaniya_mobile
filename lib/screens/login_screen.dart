@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:ramaniya_mobile/core/theme/app_colors.dart';
 import 'package:ramaniya_mobile/screens/residency_check_screen.dart';
+import 'package:ramaniya_mobile/widgets/auth_tab_switcher.dart';
 import 'package:ramaniya_mobile/widgets/screen_back_button.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -44,7 +45,9 @@ class _LoginScreenState extends State<LoginScreen> {
                   children: [
                     const _LoginHeader(),
                     const SizedBox(height: 28),
-                    _AuthTabSwitcher(
+                    AuthTabSwitcher(
+                      hasAccount: true,
+                      onHaveAccountTap: () {},
                       onNewUserTap: _openResidencyCheck,
                     ),
                     const SizedBox(height: 24),
@@ -83,7 +86,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     const SizedBox(height: 28),
                     const _SocialLoginSection(),
                     const SizedBox(height: 32),
-                    const _LoginFooter(),
+                    _LoginFooter(onSignUpTap: _openResidencyCheck),
                   ],
                 ),
               ),
@@ -152,89 +155,6 @@ class _LoginHeader extends StatelessWidget {
           ),
         ),
       ],
-    );
-  }
-}
-
-class _AuthTabSwitcher extends StatelessWidget {
-  const _AuthTabSwitcher({required this.onNewUserTap});
-
-  final VoidCallback onNewUserTap;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(4),
-      decoration: BoxDecoration(
-        color: AppColors.lightMintGreen,
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Row(
-        children: [
-          Expanded(
-            child: _AuthTab(
-              label: 'I have an account',
-              isActive: true,
-              onTap: () {},
-            ),
-          ),
-          Expanded(
-            child: _AuthTab(
-              label: 'I\u2019m new here',
-              isActive: false,
-              onTap: onNewUserTap,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _AuthTab extends StatelessWidget {
-  const _AuthTab({
-    required this.label,
-    required this.isActive,
-    required this.onTap,
-  });
-
-  final String label;
-  final bool isActive;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    return Material(
-      color: Colors.transparent,
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(10),
-        child: Ink(
-          decoration: BoxDecoration(
-            color: isActive ? AppColors.white : Colors.transparent,
-            borderRadius: BorderRadius.circular(10),
-            boxShadow: isActive
-                ? [
-                    BoxShadow(
-                      color: Colors.black.withValues(alpha: 0.06),
-                      blurRadius: 8,
-                      offset: const Offset(0, 2),
-                    ),
-                  ]
-                : null,
-          ),
-          padding: const EdgeInsets.symmetric(vertical: 12),
-          child: Text(
-            label,
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: 12,
-              fontWeight: isActive ? FontWeight.w600 : FontWeight.w500,
-              color: isActive ? AppColors.headingDark : AppColors.bodyGray,
-            ),
-          ),
-        ),
-      ),
     );
   }
 }
@@ -527,7 +447,9 @@ class _GoogleLogoPainter extends CustomPainter {
 }
 
 class _LoginFooter extends StatelessWidget {
-  const _LoginFooter();
+  const _LoginFooter({required this.onSignUpTap});
+
+  final VoidCallback onSignUpTap;
 
   @override
   Widget build(BuildContext context) {
@@ -543,7 +465,7 @@ class _LoginFooter extends StatelessWidget {
             alignment: PlaceholderAlignment.baseline,
             baseline: TextBaseline.alphabetic,
             child: GestureDetector(
-              onTap: () {},
+              onTap: onSignUpTap,
               child: Text(
                 'Sign Up',
                 style: TextStyle(
