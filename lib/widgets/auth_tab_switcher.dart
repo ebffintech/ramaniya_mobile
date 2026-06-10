@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:ramaniya_mobile/core/theme/app_colors.dart';
 
 class AuthTabSwitcher extends StatelessWidget {
@@ -16,10 +17,11 @@ class AuthTabSwitcher extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(4),
+      padding: const EdgeInsets.all(3),
       decoration: BoxDecoration(
-        color: AppColors.lightMintGreen,
+        color: AppColors.strongPaper,
         borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: AppColors.borderMain),
       ),
       child: Row(
         children: [
@@ -32,7 +34,7 @@ class AuthTabSwitcher extends StatelessWidget {
           ),
           Expanded(
             child: _AuthTab(
-              label: 'I\u2019m new here',
+              label: 'I\'m new here',
               isActive: !hasAccount,
               onTap: onNewUserTap,
             ),
@@ -63,26 +65,26 @@ class _AuthTab extends StatelessWidget {
         borderRadius: BorderRadius.circular(10),
         child: Ink(
           decoration: BoxDecoration(
-            color: isActive ? AppColors.white : Colors.transparent,
+            color: isActive ? AppColors.creamWhite : Colors.transparent,
             borderRadius: BorderRadius.circular(10),
             boxShadow: isActive
                 ? [
                     BoxShadow(
-                      color: Colors.black.withValues(alpha: 0.06),
+                      color: AppColors.primaryForest.withValues(alpha: 0.08),
                       blurRadius: 8,
                       offset: const Offset(0, 2),
                     ),
                   ]
                 : null,
           ),
-          padding: const EdgeInsets.symmetric(vertical: 12),
+          padding: const EdgeInsets.symmetric(vertical: 11),
           child: Text(
             label,
             textAlign: TextAlign.center,
-            style: TextStyle(
+            style: GoogleFonts.fraunces(
               fontSize: 12,
-              fontWeight: isActive ? FontWeight.w600 : FontWeight.w500,
-              color: isActive ? AppColors.headingDark : AppColors.bodyGray,
+              fontWeight: isActive ? FontWeight.w700 : FontWeight.w500,
+              color: isActive ? AppColors.primaryForest : AppColors.muted,
             ),
           ),
         ),
