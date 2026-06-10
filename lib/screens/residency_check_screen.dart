@@ -1,136 +1,78 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:ramaniya_mobile/core/theme/app_colors.dart';
 import 'package:ramaniya_mobile/screens/advisor_screen.dart';
 import 'package:ramaniya_mobile/screens/login_screen.dart';
 import 'package:ramaniya_mobile/widgets/auth_tab_switcher.dart';
-import 'package:ramaniya_mobile/widgets/screen_back_button.dart';
+import 'package:ramaniya_mobile/widgets/page_header.dart';
 
 class ResidencyCheckScreen extends StatelessWidget {
   const ResidencyCheckScreen({super.key});
 
-  static const _screenBackground = Color(0xFFF7FBF8);
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: _screenBackground,
-      body: SafeArea(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Padding(
-              padding: const EdgeInsets.fromLTRB(20, 12, 20, 0),
-              child: Stack(
-                alignment: Alignment.center,
-                children: [
-                  const Align(
-                    alignment: Alignment.centerLeft,
-                    child: ScreenBackButton(),
-                  ),
-                  Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 12,
-                      vertical: 6,
-                    ),
-                    decoration: BoxDecoration(
-                      color: AppColors.lightMintGreen,
-                      borderRadius: BorderRadius.circular(999),
-                      border: Border.all(color: AppColors.mintAccent),
-                    ),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Icon(
-                          Icons.auto_awesome,
-                          size: 14,
-                          color: AppColors.primaryDarkGreen,
-                        ),
-                        const SizedBox(width: 6),
-                        Text(
-                          'FIRST, A QUICK CHECK',
-                          style: TextStyle(
-                            fontSize: 10,
-                            fontWeight: FontWeight.w700,
-                            letterSpacing: 0.6,
-                            color: AppColors.primaryDarkGreen,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(20, 16, 20, 0),
-              child: AuthTabSwitcher(
-                hasAccount: false,
-                onHaveAccountTap: () {
-                  if (Navigator.of(context).canPop()) {
-                    Navigator.of(context).pop();
-                  } else {
-                    Navigator.of(context).pushReplacement(
-                      MaterialPageRoute<void>(
-                        builder: (context) => const LoginScreen(),
-                      ),
-                    );
-                  }
-                },
-                onNewUserTap: () {},
-              ),
-            ),
-            Expanded(
-              child: SingleChildScrollView(
-                padding: const EdgeInsets.fromLTRB(20, 24, 20, 24),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
-                      'Where do you currently reside?',
-                      style: TextStyle(
-                        fontSize: 26,
-                        fontWeight: FontWeight.w700,
-                        height: 1.25,
-                        letterSpacing: -0.4,
-                        color: AppColors.headingDark,
-                      ),
-                    ),
-                    const SizedBox(height: 12),
-                    Text(
-                      'Investment rules, KYC and tax treatment differ for Resident Indians and NRIs \u2014 so we tailor the next steps for you.',
-                      style: TextStyle(
-                        fontSize: 14,
-                        height: 1.5,
-                        color: AppColors.bodyGray,
-                      ),
-                    ),
-                    const SizedBox(height: 24),
-                    _ResidencyOptionCard(
-                      icon: Icons.location_on_outlined,
-                      title: 'Resident Indian',
-                      subtitle:
-                          'Self-invest in mutual funds with PAN + Aadhaar KYC',
-                      onTap: () {},
-                    ),
-                    const SizedBox(height: 12),
-                    _ResidencyOptionCard(
-                      icon: Icons.flight_outlined,
-                      title: 'NRI / OCI',
-                      subtitle:
-                          'Guided by an advisor \u2014 NRE/NRO, FATCA & repatriation handled for you',
-                      onTap: () {
-                        Navigator.of(context).push(
-                          MaterialPageRoute<void>(
-                            builder: (context) => const AdvisorScreen(),
-                          ),
-                        );
-                      },
-                    ),
-                  ],
+      backgroundColor: AppColors.softPageBg,
+      body: Container(
+        decoration: const BoxDecoration(gradient: AppColors.pageGradient),
+        child: SafeArea(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Padding(
+                padding: const EdgeInsets.fromLTRB(20, 14, 20, 0),
+                child: AuthTabSwitcher(
+                  hasAccount: false,
+                  onHaveAccountTap: () {
+                    if (Navigator.of(context).canPop()) {
+                      Navigator.of(context).pop();
+                    } else {
+                      Navigator.of(context).pushReplacement(
+                        MaterialPageRoute<void>(
+                            builder: (_) => const LoginScreen()),
+                      );
+                    }
+                  },
+                  onNewUserTap: () {},
                 ),
               ),
-            ),
-          ],
+              Expanded(
+                child: SingleChildScrollView(
+                  padding: const EdgeInsets.fromLTRB(20, 20, 20, 24),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      PageHeader(
+                        kicker: 'FIRST, A QUICK CHECK',
+                        title: 'Where do you reside?',
+                        subtitle:
+                            'Investment rules, KYC, and tax treatment differ — we tailor your next steps.',
+                      ),
+                      const SizedBox(height: 20),
+                      _ResidencyOptionCard(
+                        icon: Icons.location_on_outlined,
+                        title: 'Resident Indian',
+                        subtitle:
+                            'Self-invest in mutual funds with PAN + Aadhaar KYC.',
+                        onTap: () {},
+                      ),
+                      const SizedBox(height: 10),
+                      _ResidencyOptionCard(
+                        icon: Icons.flight_outlined,
+                        title: 'NRI / OCI',
+                        subtitle:
+                            'Guided by an advisor — NRE/NRO, FATCA & repatriation handled for you.',
+                        onTap: () => Navigator.of(context).push(
+                          MaterialPageRoute<void>(
+                              builder: (_) => const AdvisorScreen()),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -153,16 +95,17 @@ class _ResidencyOptionCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: AppColors.white,
-      borderRadius: BorderRadius.circular(14),
+      color: AppColors.warmCard,
+      borderRadius: BorderRadius.circular(16),
       child: InkWell(
         onTap: onTap,
-        borderRadius: BorderRadius.circular(14),
+        borderRadius: BorderRadius.circular(16),
         child: Ink(
           decoration: BoxDecoration(
-            color: AppColors.white,
-            borderRadius: BorderRadius.circular(14),
-            border: Border.all(color: AppColors.cardBorder),
+            color: AppColors.warmCard,
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(color: AppColors.borderMain),
+            boxShadow: AppColors.cardShadow,
           ),
           padding: const EdgeInsets.all(16),
           child: Row(
@@ -173,45 +116,39 @@ class _ResidencyOptionCard extends StatelessWidget {
                 height: 40,
                 alignment: Alignment.center,
                 decoration: BoxDecoration(
-                  color: AppColors.lightMintGreen,
+                  color: AppColors.primaryForest.withValues(alpha: 0.08),
                   borderRadius: BorderRadius.circular(10),
                 ),
-                child: Icon(
-                  icon,
-                  size: 22,
-                  color: AppColors.primaryDarkGreen,
-                ),
+                child:
+                    Icon(icon, size: 20, color: AppColors.primaryForest),
               ),
-              const SizedBox(width: 12),
+              const SizedBox(width: 14),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
                       title,
-                      style: const TextStyle(
+                      style: GoogleFonts.fraunces(
                         fontSize: 15,
                         fontWeight: FontWeight.w700,
-                        color: AppColors.headingDark,
+                        color: AppColors.primaryForest,
                       ),
                     ),
                     const SizedBox(height: 4),
                     Text(
                       subtitle,
-                      style: TextStyle(
+                      style: GoogleFonts.newsreader(
                         fontSize: 12,
                         height: 1.4,
-                        color: AppColors.bodyGray,
+                        color: AppColors.muted,
                       ),
                     ),
                   ],
                 ),
               ),
-              Icon(
-                Icons.chevron_right,
-                size: 22,
-                color: AppColors.bodyGray,
-              ),
+              const SizedBox(width: 8),
+              Icon(Icons.chevron_right, size: 20, color: AppColors.muted),
             ],
           ),
         ),

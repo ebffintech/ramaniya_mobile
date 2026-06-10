@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:ramaniya_mobile/core/theme/app_colors.dart';
 import 'package:ramaniya_mobile/screens/residency_check_screen.dart';
 import 'package:ramaniya_mobile/widgets/auth_tab_switcher.dart';
@@ -12,12 +13,10 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  static const _loginBackground = Color(0xFFF7FBF8);
-
   void _openResidencyCheck() {
     Navigator.of(context).push(
       MaterialPageRoute<void>(
-        builder: (context) => const ResidencyCheckScreen(),
+        builder: (_) => const ResidencyCheckScreen(),
       ),
     );
   }
@@ -25,78 +24,108 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: _loginBackground,
-      body: SafeArea(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            const Padding(
-              padding: EdgeInsets.fromLTRB(20, 12, 20, 0),
-              child: Align(
-                alignment: Alignment.centerLeft,
-                child: ScreenBackButton(),
-              ),
-            ),
-            Expanded(
-              child: SingleChildScrollView(
-                padding: const EdgeInsets.fromLTRB(24, 16, 24, 32),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
+      backgroundColor: AppColors.softPageBg,
+      body: Container(
+        decoration: const BoxDecoration(gradient: AppColors.pageGradient),
+        child: SafeArea(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              // Header row
+              Padding(
+                padding: const EdgeInsets.fromLTRB(20, 14, 20, 0),
+                child: Row(
                   children: [
-                    const _LoginHeader(),
-                    const SizedBox(height: 28),
-                    AuthTabSwitcher(
-                      hasAccount: true,
-                      onHaveAccountTap: () {},
-                      onNewUserTap: _openResidencyCheck,
-                    ),
-                    const SizedBox(height: 24),
-                    const _LoginFormFields(),
-                    const SizedBox(height: 8),
-                    Align(
-                      alignment: Alignment.centerRight,
-                      child: TextButton(
-                        onPressed: () {},
-                        style: TextButton.styleFrom(
-                          padding: EdgeInsets.zero,
-                          minimumSize: Size.zero,
-                          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                        ),
-                        child: const Text(
-                          'Forgot Password?',
-                          style: TextStyle(
-                            fontSize: 12,
-                            fontWeight: FontWeight.w700,
-                            color: AppColors.primaryDarkGreen,
-                          ),
+                    const ScreenBackButton(),
+                    const Spacer(),
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 10, vertical: 5),
+                      decoration: BoxDecoration(
+                        color: AppColors.gold.withValues(alpha: 0.1),
+                        borderRadius: BorderRadius.circular(999),
+                        border: Border.all(
+                            color: AppColors.gold.withValues(alpha: 0.3)),
+                      ),
+                      child: Text(
+                        'INVESTOR JOURNEY',
+                        style: GoogleFonts.fraunces(
+                          fontSize: 9,
+                          fontWeight: FontWeight.w700,
+                          letterSpacing: 1.1,
+                          color: AppColors.gold,
                         ),
                       ),
                     ),
-                    const SizedBox(height: 20),
-                    _SignInButton(onPressed: () {}),
-                    const SizedBox(height: 12),
-                    Text(
-                      'We\u2019ll take you straight to your dashboard.',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: 11,
-                        color: AppColors.bodyGray,
-                      ),
-                    ),
-                    const SizedBox(height: 28),
-                    const _SocialLoginSection(),
-                    const SizedBox(height: 32),
-                    _LoginFooter(onSignUpTap: _openResidencyCheck),
                   ],
                 ),
               ),
-            ),
-          ],
+              Expanded(
+                child: SingleChildScrollView(
+                  padding: const EdgeInsets.fromLTRB(24, 20, 24, 32),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      const _LoginHeader(),
+                      const SizedBox(height: 24),
+                      AuthTabSwitcher(
+                        hasAccount: true,
+                        onHaveAccountTap: () {},
+                        onNewUserTap: _openResidencyCheck,
+                      ),
+                      const SizedBox(height: 24),
+                      const _LoginFormFields(),
+                      const SizedBox(height: 8),
+                      Align(
+                        alignment: Alignment.centerRight,
+                        child: TextButton(
+                          onPressed: () {},
+                          style: TextButton.styleFrom(
+                            padding: EdgeInsets.zero,
+                            minimumSize: Size.zero,
+                            tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                          ),
+                          child: Text(
+                            'Forgot password?',
+                            style: GoogleFonts.newsreader(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w600,
+                              color: AppColors.primaryForest,
+                            ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 20),
+                      _GradientButton(
+                        label: 'Sign in & start investing',
+                        onTap: () {},
+                      ),
+                      const SizedBox(height: 10),
+                      Text(
+                        "We'll take you straight to your dashboard.",
+                        textAlign: TextAlign.center,
+                        style: GoogleFonts.newsreader(
+                          fontSize: 12,
+                          color: AppColors.muted,
+                        ),
+                      ),
+                      const SizedBox(height: 28),
+                      const _SocialLoginSection(),
+                      const SizedBox(height: 28),
+                      _LoginFooter(onSignUpTap: _openResidencyCheck),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
   }
 }
+
+// ── Login header ──────────────────────────────────────────────────────────────
 
 class _LoginHeader extends StatelessWidget {
   const _LoginHeader();
@@ -104,60 +133,52 @@ class _LoginHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Container(
           width: 48,
           height: 48,
           alignment: Alignment.center,
           decoration: BoxDecoration(
-            color: AppColors.lightMintGreen,
-            borderRadius: BorderRadius.circular(12),
+            color: AppColors.primaryForest,
+            borderRadius: BorderRadius.circular(14),
           ),
           child: Text(
             'R',
-            style: TextStyle(
+            style: GoogleFonts.fraunces(
               fontSize: 22,
               fontWeight: FontWeight.w800,
-              color: AppColors.primaryDarkGreen,
+              color: AppColors.creamWhite,
             ),
           ),
         ),
-        const SizedBox(height: 12),
+        const SizedBox(height: 16),
         Text(
-          'INVESTOR JOURNEY',
-          style: TextStyle(
-            fontSize: 10,
-            fontWeight: FontWeight.w800,
-            letterSpacing: 1.4,
-            color: AppColors.primaryDarkGreen,
-          ),
-        ),
-        const SizedBox(height: 20),
-        const Text(
           'Welcome back',
           textAlign: TextAlign.center,
-          style: TextStyle(
+          style: GoogleFonts.fraunces(
             fontSize: 28,
             fontWeight: FontWeight.w700,
+            color: AppColors.primaryForest,
             letterSpacing: -0.5,
-            color: AppColors.headingDark,
           ),
         ),
-        const SizedBox(height: 10),
+        const SizedBox(height: 8),
         Text(
           'Sign in and pick up where you left off.',
           textAlign: TextAlign.center,
-          style: TextStyle(
+          style: GoogleFonts.newsreader(
             fontSize: 14,
+            fontStyle: FontStyle.italic,
+            color: AppColors.warmBrown,
             height: 1.45,
-            color: AppColors.bodyGray,
           ),
         ),
       ],
     );
   }
 }
+
+// ── Form fields ───────────────────────────────────────────────────────────────
 
 class _LoginFormFields extends StatefulWidget {
   const _LoginFormFields();
@@ -167,8 +188,6 @@ class _LoginFormFields extends StatefulWidget {
 }
 
 class _LoginFormFieldsState extends State<_LoginFormFields> {
-  static const _inputFill = Color(0xFFEEF6F1);
-
   bool _obscurePassword = true;
 
   @override
@@ -176,28 +195,27 @@ class _LoginFormFieldsState extends State<_LoginFormFields> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const _FieldLabel('Email or mobile'),
+        _FieldLabel('Email or mobile'),
         const SizedBox(height: 8),
-        TextField(
+        _buildField(
+          hint: 'rahul@example.com',
           keyboardType: TextInputType.emailAddress,
-          decoration: _inputDecoration('rahul@example.com'),
         ),
-        const SizedBox(height: 18),
-        const _FieldLabel('Password'),
+        const SizedBox(height: 16),
+        _FieldLabel('Password'),
         const SizedBox(height: 8),
-        TextField(
-          obscureText: _obscurePassword,
-          decoration: _inputDecoration('••••••••').copyWith(
-            suffixIcon: IconButton(
-              onPressed: () =>
-                  setState(() => _obscurePassword = !_obscurePassword),
-              icon: Icon(
-                _obscurePassword
-                    ? Icons.visibility_outlined
-                    : Icons.visibility_off_outlined,
-                size: 20,
-                color: AppColors.bodyGray,
-              ),
+        _buildField(
+          hint: '••••••••',
+          obscure: _obscurePassword,
+          suffix: IconButton(
+            onPressed: () =>
+                setState(() => _obscurePassword = !_obscurePassword),
+            icon: Icon(
+              _obscurePassword
+                  ? Icons.visibility_outlined
+                  : Icons.visibility_off_outlined,
+              size: 18,
+              color: AppColors.muted,
             ),
           ),
         ),
@@ -205,29 +223,22 @@ class _LoginFormFieldsState extends State<_LoginFormFields> {
     );
   }
 
-  InputDecoration _inputDecoration(String hint) {
-    return InputDecoration(
-      hintText: hint,
-      hintStyle: TextStyle(
+  Widget _buildField({
+    required String hint,
+    TextInputType? keyboardType,
+    bool obscure = false,
+    Widget? suffix,
+  }) {
+    return TextField(
+      keyboardType: keyboardType,
+      obscureText: obscure,
+      style: GoogleFonts.newsreader(
         fontSize: 14,
-        color: AppColors.bodyGray.withValues(alpha: 0.85),
+        color: AppColors.ink,
       ),
-      filled: true,
-      fillColor: _inputFill,
-      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-      border: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(12),
-        borderSide: BorderSide.none,
-      ),
-      enabledBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(12),
-        borderSide: BorderSide.none,
-      ),
-      focusedBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(12),
-        borderSide: BorderSide(
-          color: AppColors.primaryMediumGreen.withValues(alpha: 0.5),
-        ),
+      decoration: InputDecoration(
+        hintText: hint,
+        suffixIcon: suffix,
       ),
     );
   }
@@ -242,46 +253,49 @@ class _FieldLabel extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       label,
-      style: TextStyle(
+      style: GoogleFonts.inter(
         fontSize: 12,
         fontWeight: FontWeight.w500,
-        color: AppColors.bodyGray,
+        color: AppColors.muted,
       ),
     );
   }
 }
 
-class _SignInButton extends StatelessWidget {
-  const _SignInButton({required this.onPressed});
+// ── Gradient CTA button ───────────────────────────────────────────────────────
 
-  final VoidCallback onPressed;
+class _GradientButton extends StatelessWidget {
+  const _GradientButton({required this.label, required this.onTap});
+
+  final String label;
+  final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: double.infinity,
-      child: ElevatedButton(
-        onPressed: onPressed,
-        style: ElevatedButton.styleFrom(
-          backgroundColor: AppColors.primaryDarkGreen,
-          foregroundColor: AppColors.white,
-          elevation: 0,
-          padding: const EdgeInsets.symmetric(vertical: 16),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
-          ),
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        height: 48,
+        decoration: BoxDecoration(
+          gradient: AppColors.primaryButtonGradient,
+          borderRadius: BorderRadius.circular(999),
+          boxShadow: AppColors.cardShadow,
         ),
-        child: const Text(
-          'Sign in & start investing',
-          style: TextStyle(
+        alignment: Alignment.center,
+        child: Text(
+          label,
+          style: GoogleFonts.fraunces(
             fontSize: 15,
             fontWeight: FontWeight.w700,
+            color: AppColors.creamWhite,
           ),
         ),
       ),
     );
   }
 }
+
+// ── Social login ──────────────────────────────────────────────────────────────
 
 class _SocialLoginSection extends StatelessWidget {
   const _SocialLoginSection();
@@ -292,21 +306,21 @@ class _SocialLoginSection extends StatelessWidget {
       children: [
         Row(
           children: [
-            Expanded(child: Divider(color: AppColors.borderGray, height: 1)),
+            Expanded(child: Divider(color: AppColors.borderMain, height: 1)),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 12),
               child: Text(
                 'or continue with',
-                style: TextStyle(
+                style: GoogleFonts.newsreader(
                   fontSize: 12,
-                  color: AppColors.bodyGray,
+                  color: AppColors.muted,
                 ),
               ),
             ),
-            Expanded(child: Divider(color: AppColors.borderGray, height: 1)),
+            Expanded(child: Divider(color: AppColors.borderMain, height: 1)),
           ],
         ),
-        const SizedBox(height: 16),
+        const SizedBox(height: 14),
         Row(
           children: [
             Expanded(
@@ -319,11 +333,7 @@ class _SocialLoginSection extends StatelessWidget {
             const SizedBox(width: 12),
             Expanded(
               child: _SocialButton(
-                icon: Icon(
-                  Icons.apple,
-                  size: 20,
-                  color: AppColors.headingDark,
-                ),
+                icon: Icon(Icons.apple, size: 20, color: AppColors.ink),
                 label: 'Apple',
                 onTap: () {},
               ),
@@ -349,18 +359,18 @@ class _SocialButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: AppColors.white,
+      color: AppColors.creamWhite,
       borderRadius: BorderRadius.circular(12),
       child: InkWell(
         onTap: onTap,
         borderRadius: BorderRadius.circular(12),
         child: Ink(
           decoration: BoxDecoration(
-            color: AppColors.white,
+            color: AppColors.creamWhite,
             borderRadius: BorderRadius.circular(12),
-            border: Border.all(color: AppColors.borderGray),
+            border: Border.all(color: AppColors.borderMain),
           ),
-          padding: const EdgeInsets.symmetric(vertical: 14),
+          padding: const EdgeInsets.symmetric(vertical: 13),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -368,10 +378,10 @@ class _SocialButton extends StatelessWidget {
               const SizedBox(width: 8),
               Text(
                 label,
-                style: const TextStyle(
-                  fontSize: 14,
+                style: GoogleFonts.fraunces(
+                  fontSize: 13,
                   fontWeight: FontWeight.w600,
-                  color: AppColors.headingDark,
+                  color: AppColors.ink,
                 ),
               ),
             ],
@@ -400,41 +410,14 @@ class _GoogleLogoPainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     final center = Offset(size.width / 2, size.height / 2);
     final radius = size.width / 2;
-
-    final blue = Paint()..color = const Color(0xFF4285F4);
-    final red = Paint()..color = const Color(0xFFEA4335);
+    final blue   = Paint()..color = const Color(0xFF4285F4);
+    final red    = Paint()..color = const Color(0xFFEA4335);
     final yellow = Paint()..color = const Color(0xFFFBBC05);
-    final green = Paint()..color = const Color(0xFF34A853);
-
-    canvas.drawArc(
-      Rect.fromCircle(center: center, radius: radius),
-      -0.4,
-      2.2,
-      true,
-      blue,
-    );
-    canvas.drawArc(
-      Rect.fromCircle(center: center, radius: radius),
-      1.8,
-      1.4,
-      true,
-      green,
-    );
-    canvas.drawArc(
-      Rect.fromCircle(center: center, radius: radius),
-      3.2,
-      1.2,
-      true,
-      yellow,
-    );
-    canvas.drawArc(
-      Rect.fromCircle(center: center, radius: radius),
-      4.4,
-      1.5,
-      true,
-      red,
-    );
-
+    final green  = Paint()..color = const Color(0xFF34A853);
+    canvas.drawArc(Rect.fromCircle(center: center, radius: radius), -0.4, 2.2, true, blue);
+    canvas.drawArc(Rect.fromCircle(center: center, radius: radius),  1.8, 1.4, true, green);
+    canvas.drawArc(Rect.fromCircle(center: center, radius: radius),  3.2, 1.2, true, yellow);
+    canvas.drawArc(Rect.fromCircle(center: center, radius: radius),  4.4, 1.5, true, red);
     canvas.drawCircle(center, radius * 0.55, Paint()..color = Colors.white);
     canvas.drawRect(
       Rect.fromLTWH(center.dx, center.dy - radius * 0.15, radius, radius * 0.3),
@@ -443,8 +426,10 @@ class _GoogleLogoPainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
+  bool shouldRepaint(covariant CustomPainter _) => false;
 }
+
+// ── Footer ────────────────────────────────────────────────────────────────────
 
 class _LoginFooter extends StatelessWidget {
   const _LoginFooter({required this.onSignUpTap});
@@ -455,12 +440,9 @@ class _LoginFooter extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text.rich(
       TextSpan(
-        style: TextStyle(
-          fontSize: 13,
-          color: AppColors.bodyGray,
-        ),
+        style: GoogleFonts.newsreader(fontSize: 13, color: AppColors.muted),
         children: [
-          const TextSpan(text: 'Don\u2019t have an account? '),
+          const TextSpan(text: "Don't have an account? "),
           WidgetSpan(
             alignment: PlaceholderAlignment.baseline,
             baseline: TextBaseline.alphabetic,
@@ -468,10 +450,10 @@ class _LoginFooter extends StatelessWidget {
               onTap: onSignUpTap,
               child: Text(
                 'Sign Up',
-                style: TextStyle(
+                style: GoogleFonts.fraunces(
                   fontSize: 13,
                   fontWeight: FontWeight.w700,
-                  color: AppColors.primaryDarkGreen,
+                  color: AppColors.primaryForest,
                 ),
               ),
             ),
