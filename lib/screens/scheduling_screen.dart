@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:ramaniya_mobile/core/theme/app_colors.dart';
 import 'package:ramaniya_mobile/screens/booking_confirmation_screen.dart';
-import 'package:ramaniya_mobile/widgets/page_header.dart';
+import 'package:ramaniya_mobile/widgets/screen_back_button.dart';
 
 class SchedulingScreen extends StatefulWidget {
   const SchedulingScreen({super.key});
@@ -12,16 +11,33 @@ class SchedulingScreen extends StatefulWidget {
 }
 
 class _SchedulingScreenState extends State<SchedulingScreen> {
+  static const _screenBackground = Color(0xFFF7FBF8);
+
   static const _timeSlots = ['10:00', '11:30', '14:00', '16:30', '17:30'];
 
   static const _months = [
-    'January', 'February', 'March', 'April', 'May', 'June',
-    'July', 'August', 'September', 'October', 'November', 'December',
+    'January',
+    'February',
+    'March',
+    'April',
+    'May',
+    'June',
+    'July',
+    'August',
+    'September',
+    'October',
+    'November',
+    'December',
   ];
 
   static const _weekdays = [
-    'MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY',
-    'FRIDAY', 'SATURDAY', 'SUNDAY',
+    'MONDAY',
+    'TUESDAY',
+    'WEDNESDAY',
+    'THURSDAY',
+    'FRIDAY',
+    'SATURDAY',
+    'SUNDAY',
   ];
 
   late DateTime _displayMonth;
@@ -36,193 +52,256 @@ class _SchedulingScreenState extends State<SchedulingScreen> {
 
   Set<int> get _availableDays {
     if (_displayMonth.year == 2026 && _displayMonth.month == 6) {
-      return {4, 5, 8, 9, 10, 11, 12, 15, 16, 17, 18, 19, 22, 23, 24, 25, 26, 29, 30};
+      return {
+        4, 5, 8, 9, 10, 11, 12, 15, 16, 17, 18, 19, 22, 23, 24, 25, 26, 29, 30,
+      };
     }
     return _weekdayDaysInMonth(_displayMonth);
   }
 
   Set<int> _weekdayDaysInMonth(DateTime month) {
     final lastDay = DateTime(month.year, month.month + 1, 0).day;
-    return {
-      for (var d = 1; d <= lastDay; d++)
-        if (DateTime(month.year, month.month, d).weekday != DateTime.saturday &&
-            DateTime(month.year, month.month, d).weekday != DateTime.sunday)
-          d,
-    };
+    final days = <int>{};
+    for (var day = 1; day <= lastDay; day++) {
+      final date = DateTime(month.year, month.month, day);
+      if (date.weekday != DateTime.saturday && date.weekday != DateTime.sunday) {
+        days.add(day);
+      }
+    }
+    return days;
   }
 
-  DateTime? get _selectedDate =>
-      _selectedDay == null ? null : DateTime(_displayMonth.year, _displayMonth.month, _selectedDay!);
+  DateTime? get _selectedDate {
+    if (_selectedDay == null) return null;
+    return DateTime(_displayMonth.year, _displayMonth.month, _selectedDay!);
+  }
 
   bool get _canConfirm => _selectedDay != null && _selectedTime != null;
 
   void _selectDay(int day) {
     if (!_availableDays.contains(day)) return;
-    setState(() { _selectedDay = day; _selectedTime = null; });
+    setState(() {
+      _selectedDay = day;
+      _selectedTime = null;
+    });
   }
 
-  void _selectTime(String time) => setState(() => _selectedTime = time);
+  void _selectTime(String time) {
+    setState(() => _selectedTime = time);
+  }
 
-  void _previousMonth() => setState(() {
-    _displayMonth = DateTime(_displayMonth.year, _displayMonth.month - 1);
-    _selectedDay = null; _selectedTime = null;
-  });
+  void _previousMonth() {
+    setState(() {
+      _displayMonth = DateTime(_displayMonth.year, _displayMonth.month - 1);
+      _selectedDay = null;
+      _selectedTime = null;
+    });
+  }
 
-  void _nextMonth() => setState(() {
-    _displayMonth = DateTime(_displayMonth.year, _displayMonth.month + 1);
-    _selectedDay = null; _selectedTime = null;
-  });
+  void _nextMonth() {
+    setState(() {
+      _displayMonth = DateTime(_displayMonth.year, _displayMonth.month + 1);
+      _selectedDay = null;
+      _selectedTime = null;
+    });
+  }
 
-  String get _monthYearLabel =>
+  String _monthYearLabel() =>
       '${_months[_displayMonth.month - 1]} ${_displayMonth.year}';
 
-  String get _selectedDayLabel {
-    final d = _selectedDate!;
-    return '${_weekdays[d.weekday - 1]}, ${d.day} ${_months[d.month - 1].toUpperCase()}';
+  String _selectedDayLabel() {
+    final date = _selectedDate!;
+    return '${_weekdays[date.weekday - 1]}, ${date.day} ${_months[date.month - 1].toUpperCase()}';
   }
 
-  String get _confirmLabel {
-    final d = _selectedDate!;
-    final m = _months[d.month - 1].substring(0, 3);
-    return 'Confirm ${d.day} $m · $_selectedTime';
+  String _confirmLabel() {
+    final date = _selectedDate!;
+    final month = _months[date.month - 1].substring(0, 3);
+    return 'Confirm ${date.day} $month \u00B7 $_selectedTime';
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.softPageBg,
-      body: Container(
-        decoration: const BoxDecoration(gradient: AppColors.pageGradient),
-        child: SafeArea(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Padding(
-                padding: const EdgeInsets.fromLTRB(20, 14, 20, 0),
-                child: PageHeader(
-                  kicker: 'STEP 2 · PICK A SLOT',
-                  title: 'Schedule your call',
-                  subtitle: '30-min discovery call via Google Meet, IST.',
-                ),
-              ),
-              Expanded(
-                child: SingleChildScrollView(
-                  padding: const EdgeInsets.fromLTRB(20, 16, 20, 16),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: AppColors.creamWhite,
-                      borderRadius: BorderRadius.circular(18),
-                      border: Border.all(color: AppColors.borderMain),
-                      boxShadow: AppColors.cardShadow,
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        const Padding(
-                          padding: EdgeInsets.all(18),
-                          child: _MeetingHeader(),
-                        ),
-                        Divider(height: 1, color: AppColors.borderSoft),
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(18, 14, 18, 18),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              _CalendarHeader(
-                                monthLabel: _monthYearLabel,
-                                onPrevious: _previousMonth,
-                                onNext: _nextMonth,
-                              ),
-                              const SizedBox(height: 14),
-                              _CalendarGrid(
-                                month: _displayMonth,
-                                availableDays: _availableDays,
-                                selectedDay: _selectedDay,
-                                onDaySelected: _selectDay,
-                              ),
-                              if (_selectedDay != null) ...[
-                                const SizedBox(height: 16),
-                                Divider(height: 1, color: AppColors.borderSoft),
-                                const SizedBox(height: 16),
-                                Text(
-                                  _selectedDayLabel,
-                                  style: GoogleFonts.fraunces(
-                                    fontSize: 10,
-                                    fontWeight: FontWeight.w700,
-                                    letterSpacing: 0.8,
-                                    color: AppColors.gold,
-                                  ),
-                                ),
-                                const SizedBox(height: 10),
-                                _TimeSlotGrid(
-                                  slots: _timeSlots,
-                                  selectedTime: _selectedTime,
-                                  onTimeSelected: _selectTime,
-                                ),
-                              ],
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
+      backgroundColor: _screenBackground,
+      body: SafeArea(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Padding(
+              padding: const EdgeInsets.fromLTRB(20, 12, 20, 0),
+              child: Stack(
+                alignment: Alignment.center,
+                children: [
+                  const Align(
+                    alignment: Alignment.centerLeft,
+                    child: ScreenBackButton(),
                   ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(20, 0, 20, 8),
-                child: GestureDetector(
-                  onTap: _canConfirm
-                      ? () => Navigator.of(context).push(
-                            MaterialPageRoute<void>(
-                                builder: (_) => const BookingConfirmationScreen()),
-                          )
-                      : null,
-                  child: Container(
-                    height: 48,
-                    decoration: BoxDecoration(
-                      gradient: _canConfirm ? AppColors.primaryButtonGradient : null,
-                      color: _canConfirm ? null : AppColors.primaryForest.withValues(alpha: 0.3),
-                      borderRadius: BorderRadius.circular(999),
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 6,
                     ),
-                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                      color: AppColors.lightMintGreen,
+                      borderRadius: BorderRadius.circular(999),
+                      border: Border.all(color: AppColors.mintAccent),
+                    ),
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
+                        Icon(
+                          Icons.verified_user_outlined,
+                          size: 14,
+                          color: AppColors.primaryDarkGreen,
+                        ),
+                        const SizedBox(width: 6),
                         Text(
-                          _canConfirm ? _confirmLabel : 'Pick a date & time',
-                          style: GoogleFonts.fraunces(
-                            fontSize: 15,
+                          'STEP 2 \u00B7 PICK A SLOT',
+                          style: TextStyle(
+                            fontSize: 10,
                             fontWeight: FontWeight.w700,
-                            color: AppColors.creamWhite,
+                            letterSpacing: 0.6,
+                            color: AppColors.primaryDarkGreen,
                           ),
                         ),
-                        const SizedBox(width: 8),
-                        Icon(Icons.arrow_forward, size: 16, color: AppColors.creamWhite),
                       ],
                     ),
                   ),
-                ),
+                ],
               ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
-                child: Text(
-                  'Mock scheduler · You\'ll get an email confirmation.',
-                  textAlign: TextAlign.center,
-                  style: GoogleFonts.newsreader(
-                    fontSize: 11,
-                    color: AppColors.muted,
+            ),
+            Expanded(
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.fromLTRB(20, 20, 20, 16),
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: AppColors.white,
+                    borderRadius: BorderRadius.circular(16),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withValues(alpha: 0.06),
+                        blurRadius: 16,
+                        offset: const Offset(0, 4),
+                      ),
+                    ],
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      const Padding(
+                        padding: EdgeInsets.all(20),
+                        child: _MeetingHeader(),
+                      ),
+                      const Divider(height: 1, color: AppColors.cardBorder),
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(20, 16, 20, 20),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            _CalendarHeader(
+                              monthLabel: _monthYearLabel(),
+                              onPrevious: _previousMonth,
+                              onNext: _nextMonth,
+                            ),
+                            const SizedBox(height: 16),
+                            _CalendarGrid(
+                              month: _displayMonth,
+                              availableDays: _availableDays,
+                              selectedDay: _selectedDay,
+                              onDaySelected: _selectDay,
+                            ),
+                            if (_selectedDay != null) ...[
+                              const SizedBox(height: 20),
+                              const Divider(
+                                height: 1,
+                                color: AppColors.cardBorder,
+                              ),
+                              const SizedBox(height: 20),
+                              Text(
+                                _selectedDayLabel(),
+                                style: TextStyle(
+                                  fontSize: 10,
+                                  fontWeight: FontWeight.w700,
+                                  letterSpacing: 0.8,
+                                  color: AppColors.bodyGray,
+                                ),
+                              ),
+                              const SizedBox(height: 12),
+                              _TimeSlotGrid(
+                                slots: _timeSlots,
+                                selectedTime: _selectedTime,
+                                onTimeSelected: _selectTime,
+                              ),
+                            ],
+                          ],
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ),
-            ],
-          ),
+            ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(20, 0, 20, 8),
+              child: SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  onPressed: _canConfirm
+                      ? () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute<void>(
+                              builder: (context) =>
+                                  const BookingConfirmationScreen(),
+                            ),
+                          );
+                        }
+                      : null,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: _canConfirm
+                        ? AppColors.primaryDarkGreen
+                        : AppColors.primaryMediumGreen,
+                    foregroundColor: AppColors.white,
+                    elevation: 0,
+                    padding: const EdgeInsets.symmetric(vertical: 16),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        _canConfirm ? _confirmLabel() : 'Pick a date & time',
+                        style: const TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                      const Icon(Icons.arrow_forward, size: 18),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(20, 0, 20, 24),
+              child: Text(
+                'Mock scheduler \u00B7 You\u2019ll get an email confirmation.',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 12,
+                  color: AppColors.bodyGray,
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );
   }
 }
-
-// ── Meeting header ────────────────────────────────────────────────────────────
 
 class _MeetingHeader extends StatelessWidget {
   const _MeetingHeader();
@@ -236,19 +315,19 @@ class _MeetingHeader extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
-              width: 38,
-              height: 38,
+              width: 40,
+              height: 40,
               alignment: Alignment.center,
               decoration: BoxDecoration(
-                color: AppColors.primaryForest,
+                color: AppColors.lightMintGreen,
                 shape: BoxShape.circle,
               ),
               child: Text(
                 'R',
-                style: GoogleFonts.fraunces(
-                  fontSize: 16,
+                style: TextStyle(
+                  fontSize: 18,
                   fontWeight: FontWeight.w800,
-                  color: AppColors.creamWhite,
+                  color: AppColors.primaryDarkGreen,
                 ),
               ),
             ),
@@ -259,21 +338,21 @@ class _MeetingHeader extends StatelessWidget {
                 children: [
                   Text(
                     'RAMANIYA ADVISORY',
-                    style: GoogleFonts.fraunces(
+                    style: TextStyle(
                       fontSize: 9,
                       fontWeight: FontWeight.w600,
                       letterSpacing: 0.8,
-                      color: AppColors.muted,
+                      color: AppColors.bodyGray,
                     ),
                   ),
                   const SizedBox(height: 4),
-                  Text(
+                  const Text(
                     '30-min Investor Discovery Call',
-                    style: GoogleFonts.fraunces(
+                    style: TextStyle(
                       fontSize: 13,
                       fontWeight: FontWeight.w700,
-                      color: AppColors.primaryForest,
                       height: 1.3,
+                      color: AppColors.headingDark,
                     ),
                   ),
                 ],
@@ -282,13 +361,20 @@ class _MeetingHeader extends StatelessWidget {
           ],
         ),
         const SizedBox(height: 10),
-        Row(
-          children: const [
+        const Row(
+          children: [
             Expanded(child: _MeetingTag(icon: Icons.schedule, label: '30 min')),
             SizedBox(width: 6),
-            Expanded(child: _MeetingTag(icon: Icons.videocam_outlined, label: 'Google Meet')),
+            Expanded(
+              child: _MeetingTag(
+                icon: Icons.videocam_outlined,
+                label: 'Google Meet',
+              ),
+            ),
             SizedBox(width: 6),
-            Expanded(child: _MeetingTag(icon: Icons.language, label: 'IST (Kolkata)')),
+            Expanded(
+              child: _MeetingTag(icon: Icons.language, label: 'IST (Kolkata)'),
+            ),
           ],
         ),
       ],
@@ -302,32 +388,33 @@ class _MeetingTag extends StatelessWidget {
   final IconData icon;
   final String label;
 
+  static const _tagBackground = Color(0xFFEDF2F7);
+
   @override
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 5),
       decoration: BoxDecoration(
-        color: AppColors.strongPaper,
+        color: _tagBackground,
         borderRadius: BorderRadius.circular(999),
-        border: Border.all(color: AppColors.borderSoft),
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(icon, size: 11, color: AppColors.muted),
-          const SizedBox(width: 4),
+          Icon(icon, size: 11, color: AppColors.bodyGray),
+          const SizedBox(width: 3),
           Flexible(
             child: Text(
               label,
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
               textAlign: TextAlign.center,
-              style: GoogleFonts.inter(
+              style: const TextStyle(
                 fontSize: 9,
                 fontWeight: FontWeight.w500,
-                color: AppColors.ink,
+                color: AppColors.headingDark,
               ),
             ),
           ),
@@ -336,8 +423,6 @@ class _MeetingTag extends StatelessWidget {
     );
   }
 }
-
-// ── Calendar ──────────────────────────────────────────────────────────────────
 
 class _CalendarHeader extends StatelessWidget {
   const _CalendarHeader({
@@ -356,10 +441,10 @@ class _CalendarHeader extends StatelessWidget {
       children: [
         Text(
           monthLabel,
-          style: GoogleFonts.fraunces(
-            fontSize: 15,
+          style: const TextStyle(
+            fontSize: 16,
             fontWeight: FontWeight.w700,
-            color: AppColors.primaryForest,
+            color: AppColors.headingDark,
           ),
         ),
         const Spacer(),
@@ -380,20 +465,15 @@ class _MonthNavButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: AppColors.strongPaper,
+      color: AppColors.borderGray,
       shape: const CircleBorder(),
       child: InkWell(
         onTap: onTap,
         customBorder: const CircleBorder(),
-        child: Container(
-          width: 30,
-          height: 30,
-          alignment: Alignment.center,
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            border: Border.all(color: AppColors.borderMain),
-          ),
-          child: Icon(icon, size: 18, color: AppColors.primaryForest),
+        child: SizedBox(
+          width: 32,
+          height: 32,
+          child: Icon(icon, size: 20, color: AppColors.headingDark),
         ),
       ),
     );
@@ -425,45 +505,49 @@ class _CalendarGrid extends StatelessWidget {
       children: [
         Row(
           children: _weekdayLabels
-              .map((l) => Expanded(
-                    child: Text(
-                      l,
-                      textAlign: TextAlign.center,
-                      style: GoogleFonts.inter(
-                        fontSize: 10,
-                        fontWeight: FontWeight.w600,
-                        color: AppColors.muted,
-                      ),
+              .map(
+                (label) => Expanded(
+                  child: Text(
+                    label,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 11,
+                      fontWeight: FontWeight.w600,
+                      color: AppColors.bodyGray.withValues(alpha: 0.8),
                     ),
-                  ))
+                  ),
+                ),
+              )
               .toList(),
         ),
-        const SizedBox(height: 6),
-        ...List.generate(
-          ((startOffset + daysInMonth + 6) / 7).ceil(),
-          (week) => Padding(
-            padding: const EdgeInsets.only(bottom: 2),
+        const SizedBox(height: 8),
+        ...List.generate(((startOffset + daysInMonth + 6) / 7).ceil(), (week) {
+          return Padding(
+            padding: const EdgeInsets.only(bottom: 4),
             child: Row(
               children: List.generate(7, (weekday) {
-                final idx = week * 7 + weekday;
-                final day = idx - startOffset + 1;
-                if (day < 1 || day > daysInMonth) {
-                  return const Expanded(child: SizedBox(height: 34));
+                final cellIndex = week * 7 + weekday;
+                final dayNumber = cellIndex - startOffset + 1;
+
+                if (dayNumber < 1 || dayNumber > daysInMonth) {
+                  return const Expanded(child: SizedBox(height: 36));
                 }
-                final isAvailable = availableDays.contains(day);
-                final isSelected = selectedDay == day;
+
+                final isAvailable = availableDays.contains(dayNumber);
+                final isSelected = selectedDay == dayNumber;
+
                 return Expanded(
                   child: _CalendarDayCell(
-                    day: day,
+                    day: dayNumber,
                     isAvailable: isAvailable,
                     isSelected: isSelected,
-                    onTap: isAvailable ? () => onDaySelected(day) : null,
+                    onTap: isAvailable ? () => onDaySelected(dayNumber) : null,
                   ),
                 );
               }),
             ),
-          ),
-        ),
+          );
+        }),
       ],
     );
   }
@@ -482,36 +566,38 @@ class _CalendarDayCell extends StatelessWidget {
   final bool isSelected;
   final VoidCallback? onTap;
 
+  static const _availableDateFill = Color(0xFFE8F5E9);
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onTap,
       behavior: HitTestBehavior.opaque,
       child: SizedBox(
-        height: 34,
+        height: 36,
         child: Center(
           child: Container(
-            width: 30,
-            height: 30,
+            width: 32,
+            height: 32,
             alignment: Alignment.center,
             decoration: BoxDecoration(
               color: isSelected
-                  ? AppColors.primaryForest
+                  ? AppColors.primaryDarkGreen
                   : isAvailable
-                      ? AppColors.primaryForest.withValues(alpha: 0.08)
+                      ? _availableDateFill
                       : Colors.transparent,
               shape: BoxShape.circle,
             ),
             child: Text(
               '$day',
-              style: GoogleFonts.inter(
-                fontSize: 12,
+              style: TextStyle(
+                fontSize: 13,
                 fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
                 color: isSelected
-                    ? AppColors.creamWhite
+                    ? AppColors.white
                     : isAvailable
-                        ? AppColors.primaryForest
-                        : AppColors.muted.withValues(alpha: 0.45),
+                        ? AppColors.headingDark
+                        : AppColors.bodyGray.withValues(alpha: 0.45),
               ),
             ),
           ),
@@ -520,8 +606,6 @@ class _CalendarDayCell extends StatelessWidget {
     );
   }
 }
-
-// ── Time slot grid ────────────────────────────────────────────────────────────
 
 class _TimeSlotGrid extends StatelessWidget {
   const _TimeSlotGrid({
@@ -534,57 +618,58 @@ class _TimeSlotGrid extends StatelessWidget {
   final String? selectedTime;
   final ValueChanged<String> onTimeSelected;
 
+  static const _slotFill = Color(0xFFE8F5E9);
+
   @override
   Widget build(BuildContext context) {
-    return LayoutBuilder(builder: (context, constraints) {
-      const spacing = 8.0;
-      const slotsPerRow = 4;
-      final slotWidth =
-          (constraints.maxWidth - spacing * (slotsPerRow - 1)) / slotsPerRow;
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        const spacing = 8.0;
+        const slotsPerRow = 4;
+        final slotWidth =
+            (constraints.maxWidth - spacing * (slotsPerRow - 1)) / slotsPerRow;
 
-      return Wrap(
-        spacing: spacing,
-        runSpacing: spacing,
-        children: slots.map((slot) {
-          final isSelected = selectedTime == slot;
-          return SizedBox(
-            width: slotWidth,
-            child: Material(
-              color: Colors.transparent,
-              child: InkWell(
-                onTap: () => onTimeSelected(slot),
-                borderRadius: BorderRadius.circular(10),
-                child: Ink(
-                  decoration: BoxDecoration(
-                    color: isSelected
-                        ? AppColors.primaryForest
-                        : AppColors.primaryForest.withValues(alpha: 0.07),
-                    borderRadius: BorderRadius.circular(10),
-                    border: Border.all(
+        return Wrap(
+          spacing: spacing,
+          runSpacing: spacing,
+          children: slots.map((slot) {
+            final isSelected = selectedTime == slot;
+            return SizedBox(
+              width: slotWidth,
+              child: Material(
+                color: Colors.transparent,
+                child: InkWell(
+                  onTap: () => onTimeSelected(slot),
+                  borderRadius: BorderRadius.circular(10),
+                  child: Ink(
+                    decoration: BoxDecoration(
                       color: isSelected
-                          ? AppColors.primaryForest
-                          : AppColors.borderMain,
+                          ? AppColors.primaryDarkGreen
+                          : _slotFill,
+                      borderRadius: BorderRadius.circular(10),
                     ),
-                  ),
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 4, vertical: 10),
-                  child: Text(
-                    slot,
-                    textAlign: TextAlign.center,
-                    style: GoogleFonts.fraunces(
-                      fontSize: 12,
-                      fontWeight: FontWeight.w600,
-                      color: isSelected
-                          ? AppColors.creamWhite
-                          : AppColors.primaryForest,
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 4,
+                      vertical: 10,
+                    ),
+                    child: Text(
+                      slot,
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 13,
+                        fontWeight: FontWeight.w600,
+                        color: isSelected
+                            ? AppColors.white
+                            : AppColors.headingDark,
+                      ),
                     ),
                   ),
                 ),
               ),
-            ),
-          );
-        }).toList(),
-      );
-    });
+            );
+          }).toList(),
+        );
+      },
+    );
   }
 }

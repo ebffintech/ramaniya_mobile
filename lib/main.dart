@@ -5,12 +5,8 @@ import 'package:ramaniya_mobile/screens/landing_screen.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  // Pre-load all three brand fonts before first frame.
-  await GoogleFonts.pendingFonts([
-    GoogleFonts.inter(),
-    GoogleFonts.fraunces(),
-    GoogleFonts.newsreader(),
-  ]);
+  // Load Inter before first frame so google_fonts does not block the UI thread.
+  await GoogleFonts.pendingFonts([GoogleFonts.inter()]);
   runApp(const RamaniyaApp());
 }
 
